@@ -1,13 +1,27 @@
+# Compiled object files
+*.o
+
+# Executables
+*.exe
+*.out
+
+# Compiled libraries
+*.a
+*.so
+
+# Disable for now
+*.cmake
+
+# Build directory
 /build/
 
-# External directory
-/external/ 
-## es donde van a caer las dependencias externas que vamos a descargar, osea librerias de terceros
+# External directoy
+/external/
 
 # Dependency files
 *.d
 
-# Edit/IDE specific files
+# Editor/IDE specific files
 .vscode/
 .idea/
 

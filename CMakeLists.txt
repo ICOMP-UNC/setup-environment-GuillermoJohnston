@@ -35,3 +35,17 @@ file(GLOB_RECURSE SOURCES "src/*.c")
 add_executable(${PROJECT_NAME} ${SOURCES})
 ## similar a bash puedo leer variables, en donde "SOURCES" percenece al comando file() y
 ## "PROJECT_NAME" es del comando project()
+
+# Compile the libraries
+# See: https://cmake.org/cmake/help/latest/command/add_subdirectory.html
+add_subdirectory(lib/libdyn)
+add_subdirectory(lib/libsta)
+
+# Include headers in lib
+# See: https://cmake.org/cmake/help/latest/command/target_include_directories.html
+target_include_directories(${PROJECT_NAME} PUBLIC lib/libdyn/include)
+target_include_directories(${PROJECT_NAME} PUBLIC lib/libsta/include)
+
+# Link the libraries
+# See: https://cmake.org/cmake/help/latest/command/target_link_libraries.html
+target_link_libraries(${PROJECT_NAME} StatiCLib DynamiCLib)
