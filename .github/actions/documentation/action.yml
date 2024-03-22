@@ -1,0 +1,46 @@
+name: "Doc check"
+description: "Code documentation generation with Doxygen"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Run doxygen command"
+      shell: bash
+      run: |
+          # We only make check, not changes
+          DOX_CONF_FILE=$(pwd)/Doxyfile
+
+          # It concatenates the contents of the Doxyfile file with the PATHs to src, 
+          # include and lib and the result is saved back to the Doxyfile file
+          {
+              cat $DOX_CONF_FILE
+              echo "INPUT" = $(pwd)/src $(pwd)/include $(pwd)/lib
+          } > $DOX_CONF_FILE
+
+          # Generate documentation
+          # dot is used to generate, from a .dot file, graph, tree and network structures. 
+          # What I need to understand is where the .dot file is located or who generates it. 
+          # The -c option is for configure plugins.
+          sudo dot -c
+
+          ERROR_FILE_FLAG=$(pwd)/dox_errors.txt
+
+          # Generate the doxygen document with the configuration described in "DOX_CONF_FILE",
+          # the -s option is to execute the command silently. If an error occurs,
+          # it is cached with the flag ERROR_FILE_FLAG, because it would not be empty.
+          DOXYGEN_COMMAND=$(doxygen -s $DOX_CONF_FILE) > $ERROR_FILE_FLAG
+
+          if [ -s $ERROR_FILE_FLAG ]; then
+              echo "Error: There are some files that are not documented correctly"
+              exit 1
+          else
+              echo "All files are documented correctly. Niiiceee"
+              exit 0
+          fi
+    # Upload errors as an artifact, when failed
+    - uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: Doxygen errors!!!
+        path: $(pwd)/dox_errors.txt
+        retention-days: 1
