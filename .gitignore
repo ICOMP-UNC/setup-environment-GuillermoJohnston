@@ -1,0 +1,15 @@
+/build/
+
+# External directory
+/external/ 
+## es donde van a caer las dependencias externas que vamos a descargar, osea librerias de terceros
+
+# Dependency files
+*.d
+
+# Edit/IDE specific files
+.vscode/
+.idea/
+
+# Dont track sonnar files
+.scannerwork/
